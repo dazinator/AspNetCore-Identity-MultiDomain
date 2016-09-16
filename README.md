@@ -12,8 +12,8 @@ on the following domains:
 ```
 
 2. Start the website running. 
-  Browse to `app.foo.com` and log in. 
-  Browse to `app.bar.com` and log in. 
+  Browse to `http://app.foo.com:57425/` and log in. 
+  Browse to `http://app.bar.com:57426` and log in. 
   
 Issue:
 
