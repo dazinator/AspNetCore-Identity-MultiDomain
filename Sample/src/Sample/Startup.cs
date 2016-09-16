@@ -44,10 +44,11 @@ namespace Sample
             // Add framework services.
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
+            
+           
             services.AddIdentity<ApplicationUser, IdentityRole>()
-             .AddEntityFrameworkStores<ApplicationDbContext>()
-             .AddDefaultTokenProviders();
+          .AddEntityFrameworkStores<ApplicationDbContext>()
+          .AddDefaultTokenProviders();
 
             services.AddMvc();
 
@@ -77,15 +78,14 @@ namespace Sample
 
             app.UseIdentity();
 
-            CookieAuthenticationOptions cookieOptions = new CookieAuthenticationOptions();
-            cookieOptions.AutomaticChallenge = true;
-            cookieOptions.AutomaticAuthenticate = true;
-            cookieOptions.ExpireTimeSpan = TimeSpan.FromMinutes(120);
-            cookieOptions.CookieName = "TestIdentity";
-            cookieOptions.LoginPath = "/Account/Login";
-            cookieOptions.AuthenticationScheme = new IdentityOptions().Cookies.ApplicationCookie.AuthenticationScheme;
+
+            var options = GetCookieAuthenticationOptions(".bar.com");
+            app.UseCookieAuthentication(options);
+
+            options = GetCookieAuthenticationOptions(".foo.com");
+            app.UseCookieAuthentication(options);
+
         
-            app.UseCookieAuthentication(cookieOptions);
 
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
 
@@ -95,6 +95,25 @@ namespace Sample
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+
+        private CookieAuthenticationOptions GetCookieAuthenticationOptions(string domain)
+        {
+
+            IdentityOptions options = new IdentityOptions();
+            var appCookieOptions = options.Cookies.ApplicationCookie;
+
+            appCookieOptions.AutomaticChallenge = true;
+            appCookieOptions.AutomaticAuthenticate = true;
+            appCookieOptions.ExpireTimeSpan = TimeSpan.FromMinutes(120);
+            // appCookieOptions.CookieName = domain;
+           
+            appCookieOptions.CookieDomain = domain;
+            appCookieOptions.LoginPath = "/Account/Login";
+           // appCookieOptions.AuthenticationScheme = appCookieOptions.AuthenticationScheme + domain;
+
+            return appCookieOptions;
+
         }
     }
 }
