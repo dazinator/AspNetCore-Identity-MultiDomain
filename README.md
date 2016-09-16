@@ -17,8 +17,8 @@ When you log in, we want the asp.net identity cookie to be shared accross `.bar.
 To replicate the issue:
 
 2. Start the website running. 
-3. Browse to `http://app.bar.com:57425/` and register a user account. (It will ask you to apply the EF migrations during this)
-4. Once logged in, browse to `http://another.bar.com:57425/` - we want you to still be logged in.
+3. Browse to `http://app.bar.com:57426/` and register a user account. (It will ask you to apply the EF migrations during this)
+4. Once logged in, browse to `http://another.bar.com:57427/` - we want you to still be logged in.
 
 Issue:
 Cannot figure out how to segregate the identity cookie for a domain.
