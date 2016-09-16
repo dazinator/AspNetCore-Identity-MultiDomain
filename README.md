@@ -1,7 +1,7 @@
 # AspNetCore-Identity-MultiDomain
 An example trying to get asp.net core identity working with seperate domains.
 
-To replicate:
+To replicate the problem:
 
 1. On windows, edit your hosts file, adding the following lines, so you will be able to browse the locally running website
 on the following domains:
@@ -12,10 +12,11 @@ on the following domains:
 ```
 
 2. Start the website running. 
-  Browse to `http://app.foo.com:57425/` and log in. 
-  Browse to `http://app.bar.com:57426` and log in. 
+3. Browse to `http://app.foo.com:57425/` and register a user account. (It will ask you to apply the EF migrations during this)
+4. Log in using your account. It will appear to succeed but you wont get an identity cookie, and the app still sees you as logged out.
+
   
 Issue:
 
-Want a seperate identity cookie per domain, but can't figure out how to do it!
+How do we set up identity cookies per domain?
 
