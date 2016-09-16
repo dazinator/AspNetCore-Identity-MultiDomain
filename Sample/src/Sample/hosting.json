@@ -1,0 +1,3 @@
+{
+  "server.urls": "http://localhost:5000;http://app.foo.com:57425;http://app.bar.com:57426"
+}
