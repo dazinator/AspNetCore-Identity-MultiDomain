@@ -17,7 +17,7 @@ namespace Sample
 {
     public class Startup
     {
-        private CookieAuthenticationOptions cookieAuthOptions;
+       // private CookieAuthenticationOptions cookieAuthOptions;
 
         public Startup(IHostingEnvironment env)
         {
@@ -47,21 +47,22 @@ namespace Sample
 
             var cookieName = "myCookieName";
 
-            services.AddIdentity<ApplicationUser, IdentityRole>(a =>
-            {
-                //a.Cookies.ApplicationCookie.Events = new CustomCookieAuthenticationEvents();
-                // a.Cookies.ApplicationCookie.TicketDataFormat = skyConnectCookieFormat;
-                a.Cookies.ApplicationCookie.CookieName = cookieName;
-                a.Cookies.ApplicationCookie.LoginPath = "/Account/Login";
-                // a.Cookies.ApplicationCookie.AccessDeniedPath = accessDeniedPath;
-                a.Cookies.ApplicationCookie.AutomaticChallenge = true;
-                a.Cookies.ApplicationCookie.AutomaticAuthenticate = true;
-                a.Cookies.ApplicationCookie.ExpireTimeSpan = TimeSpan.FromMinutes(120);
-                // a.Cookies.ApplicationCookie.AuthenticationScheme = 
-                cookieAuthOptions = a.Cookies.ApplicationCookie;
-            })
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
+            //services.AddIdentity<ApplicationUser, IdentityRole>(a =>
+            //{
+            //    //a.Cookies.ApplicationCookie.Events = new CustomCookieAuthenticationEvents();
+            //    // a.Cookies.ApplicationCookie.TicketDataFormat = skyConnectCookieFormat;
+            //   // a.Cookies.ApplicationCookie.CookieName = cookieName;
+            //    a.Cookies.ApplicationCookie.LoginPath = "/Account/Login";
+            //    // a.Cookies.ApplicationCookie.AccessDeniedPath = accessDeniedPath;
+            //    a.Cookies.ApplicationCookie.AutomaticChallenge = true;
+            //    a.Cookies.ApplicationCookie.AutomaticAuthenticate = true;
+            //    a.Cookies.ApplicationCookie.ExpireTimeSpan = TimeSpan.FromMinutes(120);
+            //    // a.Cookies.ApplicationCookie.AuthenticationScheme = 
+            //    cookieAuthOptions = a.Cookies.ApplicationCookie;
+            //})
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+               .AddEntityFrameworkStores<ApplicationDbContext>()
+               .AddDefaultTokenProviders();
 
             services.AddMvc();
 
@@ -91,12 +92,28 @@ namespace Sample
 
             app.UseIdentity();
 
-            // allow cookie to be used on domains foo and bar.
-            cookieAuthOptions.CookieDomain = ".foo.com";
-            app.UseCookieAuthentication(cookieAuthOptions);
+            CookieAuthenticationOptions cookieOptions = new CookieAuthenticationOptions();
+            cookieOptions.AutomaticChallenge = true;
+            cookieOptions.AutomaticAuthenticate = true;
+            cookieOptions.ExpireTimeSpan = TimeSpan.FromMinutes(120); ;
+            //cookieOptions.AccessDeniedPath = accessDeniedPath;
+            cookieOptions.LoginPath = "/Account/Login";
+            cookieOptions.AuthenticationScheme = new IdentityOptions().Cookies.ApplicationCookie.AuthenticationScheme;
 
-            cookieAuthOptions.CookieDomain = ".bar.com";
-            app.UseCookieAuthentication(cookieAuthOptions);
+            app.UseCookieAuthentication(cookieOptions);
+
+            cookieOptions.CookieDomain = ".foo.com";
+            app.UseCookieAuthentication(cookieOptions);
+
+            cookieOptions.CookieDomain = ".bar.com";
+            app.UseCookieAuthentication(cookieOptions);
+
+            // allow cookie to be used on domains foo and bar.
+            //   cookieAuthOptions.CookieDomain = ".foo.com";
+            // app.UseCookieAuthentication(cookieAuthOptions);
+
+            // cookieAuthOptions.CookieDomain = ".bar.com";
+            // app.UseCookieAuthentication(cookieAuthOptions);
 
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
 
